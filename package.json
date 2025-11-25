@@ -9,14 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react-dom": "^19.2.0",
-    "lucide-react": "^0.554.0",
-    "react-router-dom": "^7.9.6",
-    "react": "^19.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "6.22.3",
+    "lucide-react": "0.344.0",
     "framer-motion": "11.0.8",
     "ogl": "1.0.11",
     "gsap": "3.12.5",
-    "@motionone/utils": "^10.18.0"
+    "@motionone/utils": "10.18.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

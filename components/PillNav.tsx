@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
@@ -54,7 +55,8 @@ const PillNav: React.FC<PillNavProps> = ({
   useEffect(() => {
     const layout = () => {
       circleRefs.current.forEach((circle, i) => {
-        if (!circle?.parentElement) return;
+        // Skip layout logic if circle ref is missing (e.g. Submit button doesn't have one)
+        if (!circle || !circle.parentElement) return;
 
         const pill = circle.parentElement;
         const rect = pill.getBoundingClientRect();
@@ -263,55 +265,67 @@ const PillNav: React.FC<PillNavProps> = ({
 
         <div className="pill-nav-items desktop-only" ref={navItemsRef}>
           <ul className="pill-list" role="menubar">
-            {items.map((item, i) => (
-              <li key={item.href || `item-${i}`} role="none">
-                {isRouterLink(item.href) ? (
-                  <Link
-                    role="menuitem"
-                    to={item.href}
-                    className={`pill${activeHref === item.href ? ' is-active' : ''}`}
-                    aria-label={item.ariaLabel || item.label}
-                    onMouseEnter={() => handleEnter(i)}
-                    onMouseLeave={() => handleLeave(i)}
-                  >
-                    <span
-                      className="hover-circle"
-                      aria-hidden="true"
-                      // @ts-ignore
-                      ref={(el) => (circleRefs.current[i] = el)}
-                    />
-                    <span className="label-stack">
-                      <span className="pill-label">{item.label}</span>
-                      <span className="pill-label-hover" aria-hidden="true">
-                        {item.label}
+            {items.map((item, i) => {
+              const isSubmit = item.label === 'Submit';
+              
+              return (
+                <li key={item.href || `item-${i}`} role="none">
+                  {isRouterLink(item.href) ? (
+                    <Link
+                      role="menuitem"
+                      to={item.href}
+                      className={`pill${activeHref === item.href ? ' is-active' : ''} ${isSubmit ? 'pill-submit' : ''}`}
+                      aria-label={item.ariaLabel || item.label}
+                      onMouseEnter={() => !isSubmit && handleEnter(i)}
+                      onMouseLeave={() => !isSubmit && handleLeave(i)}
+                    >
+                      {!isSubmit && (
+                        <span
+                          className="hover-circle"
+                          aria-hidden="true"
+                          // @ts-ignore
+                          ref={(el) => (circleRefs.current[i] = el)}
+                        />
+                      )}
+                      <span className="label-stack">
+                        <span className="pill-label">{item.label}</span>
+                        {!isSubmit && (
+                          <span className="pill-label-hover" aria-hidden="true">
+                            {item.label}
+                          </span>
+                        )}
                       </span>
-                    </span>
-                  </Link>
-                ) : (
-                  <a
-                    role="menuitem"
-                    href={item.href}
-                    className={`pill${activeHref === item.href ? ' is-active' : ''}`}
-                    aria-label={item.ariaLabel || item.label}
-                    onMouseEnter={() => handleEnter(i)}
-                    onMouseLeave={() => handleLeave(i)}
-                  >
-                    <span
-                      className="hover-circle"
-                      aria-hidden="true"
-                      // @ts-ignore
-                      ref={(el) => (circleRefs.current[i] = el)}
-                    />
-                    <span className="label-stack">
-                      <span className="pill-label">{item.label}</span>
-                      <span className="pill-label-hover" aria-hidden="true">
-                        {item.label}
+                    </Link>
+                  ) : (
+                    <a
+                      role="menuitem"
+                      href={item.href}
+                      className={`pill${activeHref === item.href ? ' is-active' : ''} ${isSubmit ? 'pill-submit' : ''}`}
+                      aria-label={item.ariaLabel || item.label}
+                      onMouseEnter={() => !isSubmit && handleEnter(i)}
+                      onMouseLeave={() => !isSubmit && handleLeave(i)}
+                    >
+                      {!isSubmit && (
+                        <span
+                          className="hover-circle"
+                          aria-hidden="true"
+                          // @ts-ignore
+                          ref={(el) => (circleRefs.current[i] = el)}
+                        />
+                      )}
+                      <span className="label-stack">
+                        <span className="pill-label">{item.label}</span>
+                        {!isSubmit && (
+                          <span className="pill-label-hover" aria-hidden="true">
+                            {item.label}
+                          </span>
+                        )}
                       </span>
-                    </span>
-                  </a>
-                )}
-              </li>
-            ))}
+                    </a>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
 

@@ -44,7 +44,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           { label: 'Boilerplates', href: '/boilerplates' },
           { label: 'Automations', href: '/automations' },
           { label: 'Blog', href: '/blog' },
-          { label: 'Login', href: '/login' }
+          { label: 'Login', href: '/login' },
+          { label: 'Submit', href: '#' }
         ]}
         activeHref={location.pathname}
         baseColor={navConfig.baseColor}
